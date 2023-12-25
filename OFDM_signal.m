@@ -12,7 +12,7 @@ N=8; b=2; M=2^b; Nos=16; NNos=N*Nos; T=1/NNos; time = [0:T:1-T];
 %end
 %[inI,inQ,Mod,Nsym] = mapper(b,N,'Y');
 %msgint=randint(1,N,M); X=A*modulate(mod_object,msgint);
-[X,Mod] = mapper(b,N); X(1)=0+j*0; % A block of 16 QPSK symbols with no DC-subcarrier 
+[X,Mod] = mapper(b,N); X(1)=0+1j*0; % A block of 16 QPSK symbols with no DC-subcarrier 
 for i = 1:N
    if i<=N/2,  x = ifft([zeros(1,i-1) X(i) zeros(1,NNos-i+1)],NNos);
    else  x = ifft([zeros(1,NNos-N+i-1) X(i) zeros(1,N-i)],NNos);
@@ -26,12 +26,12 @@ title([Mod ', N=' num2str(N)]); ylabel('x_{I}(t)'); axis([0 1 min(sum_xI) max(su
 subplot(312)
 plot(time,xQ,'k:','linewidth',1); hold on, plot(time,sum_xQ,'b','linewidth',2)
 ylabel('x_{Q}(t)'); axis([0 1 min(sum_xQ) max(sum_xQ)]);
-subplot(313), plot(time,abs(sum_xI+j*sum_xQ),'b','linewidth',2); hold on;
+subplot(313), plot(time,abs(sum_xI+1j*sum_xQ),'b','linewidth',2); hold on;
 ylabel('|x(t)|'); xlabel('t');
 clear('xI'), clear('xQ')
 N=2^4;  NNos=N*Nos; T=1/NNos; time=[0:T:1-T]; Nhist=1e3;
 for k = 1:Nhist
-   [X,Mod] = mapper(b,N); X(1)=0+j*0; % A block of 16 QPSK symbols with no DC-subcarrier 
+   [X,Mod] = mapper(b,N); X(1)=0+1j*0; % A block of 16 QPSK symbols with no DC-subcarrier 
    for i = 1:N
       if (i<= N/2)  x = ifft([zeros(1,i-1) X(i) zeros(1,NNos-i+1)],NNos);
        else  x = ifft([zeros(1,NNos-N/2+i-N/2-1) X(i) zeros(1,N-i)],NNos);
@@ -48,5 +48,5 @@ subplot(312)
 [xQ_dist,bins] = hist(HistQ,N_bin);  bar(bins,xQ_dist/sum(xQ_dist),'k');
 ylabel('pdf of x_{Q}(t)');
 subplot(313)
-[xabs_dist,bins] = hist(abs(HistI+j*HistI),N_bin);  bar(bins,xabs_dist/sum(xabs_dist),'k');
+[xabs_dist,bins] = hist(abs(HistI+1j*HistI),N_bin);  bar(bins,xabs_dist/sum(xabs_dist),'k');
 ylabel('pdf of |x(t)|');  xlabel('x_{0}');
